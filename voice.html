@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhojpuri AI Voice Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 80%;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bhojpuri AI Voice Assistant</h1>
+        <input type="text" id="userInput" placeholder="Type your command..." />
+        <button onclick="processCommand()">Speak</button>
+        <p id="assistantResponse">Waiting for your command...</p>
+    </div>
+
+    <script>
+        function processCommand() {
+            const userCommand = document.getElementById("userInput").value;
+            if (userCommand === "") {
+                document.getElementById("assistantResponse").innerText = "Please type a command!";
+                return;
+            }
+
+            document.getElementById("assistantResponse").innerText = `You typed: ${userCommand}`;
+
+            respondToCommand(userCommand);
+        }
+
+        function respondToCommand(command) {
+            const speechSynthesis = window.speechSynthesis;
+            const speech = new SpeechSynthesisUtterance();
+
+            speech.lang = 'en-IN'; 
+
+            if (command.includes("hello")) {
+                speech.text = "Hello, kaise ba? Hum Bhojpuri mein baat karat bani!";
+            } else if (command.includes("how are you")) {
+                speech.text = "Hum thik bani, ka haal ba?";
+            } else {
+                speech.text = "Maaf kari, hum samajh nahi paaye.";
+            }
+
+            const voices = speechSynthesis.getVoices();
+            console.log(voices); 
+
+            let indianFemaleVoice = voices.find(voice => voice.lang === "en-IN" && voice.name.includes("Female"));
+
+            if (!indianFemaleVoice) {
+                indianFemaleVoice = voices.find(voice => voice.name.includes("Google UK English Female"));
+            }
+
+            if (!indianFemaleVoice) {
+                indianFemaleVoice = voices[0];
+            }
+
+            speech.voice = indianFemaleVoice;
+
+            speechSynthesis.speak(speech);
+        }
+    </script>
+</body>
+</html>
